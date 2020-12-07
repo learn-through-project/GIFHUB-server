@@ -1,4 +1,5 @@
 const upload = require('../../config/s3');
+const { saveMediaFile } = require('../controllers/mediaFile');
 const { INPUT_TAG_NAME, MEDIA_FILE, ROOT_ROUTE } = require('../../constants');
 
 module.exports = router => {
@@ -7,7 +8,6 @@ module.exports = router => {
   router.post(
     ROOT_ROUTE,
     upload.single(INPUT_TAG_NAME),
-    (req, res, next) => {
-    console.log(req.file,'video');
-  });
+    saveMediaFile,
+  );
 };
