@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const apiRoutes = require('../api');
 const { ROOT_ROUTE } = require('../constants');
@@ -9,7 +10,7 @@ module.exports = async app => {
   app.use(require('morgan')('dev'));
   app.use(cors());
   app.use(ROOT_ROUTE, apiRoutes());
-
+  app.use(express.static(path.join(__dirname, '../public')));
   app.use(function(req, res, next) {
     next(createError(404));
   });
