@@ -17,6 +17,11 @@ module.exports = class {
   }
 
   async findMediaFileById(id) {
-    return await MediaFile.findById(id);
+    try {
+      return await MediaFile.findById(id);
+    } catch (err) {
+      console.log('Error in findMediaFileById:', err);
+      next(err);
+    }
   }
 };
