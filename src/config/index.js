@@ -1,7 +1,8 @@
 const s3 = require('./s3');
-const multer = require('./multer');
+const { multerS3, multerMemory } = require('./multer');
 
 module.exports = {
   s3,
-  multer,
+  multerS3,
+  multerMemory,
 };

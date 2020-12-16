@@ -4,7 +4,7 @@ const multerS3 = require('multer-s3');
 const { v4: uuidv4 } = require('uuid');
 const { S3_BUCKET_NAME2, S3_ACL } = require('../constants');
 
-module.exports = multer({
+exports.multerS3 = multer({
   storage: multerS3({
     s3,
     bucket: S3_BUCKET_NAME2,
@@ -14,4 +14,8 @@ module.exports = multer({
     },
     acl: S3_ACL,
   })
+});
+
+exports.multerMemory = multer({
+  storage: multer.memoryStorage()
 });
