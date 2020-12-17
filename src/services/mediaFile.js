@@ -1,5 +1,4 @@
 const MediaFile = require('../models/mediaFile');
-const { serviceErrors } = require('../constants');
 
 module.exports = class {
   async saveMediaFile(mediaFile) {
@@ -23,5 +22,17 @@ module.exports = class {
       console.log('Error in findMediaFileById:', err);
       next(err);
     }
+  }
+
+  async createFinalFile(query, id, imageFile) {
+    try {
+    
+
+    } catch (err) {
+
+    }
+
+
+
   }
 };
