@@ -1,9 +1,9 @@
 const fs = require('fs');
-const stream = require('stream');
-const MediaFileService = require('../../services/mediaFile');
+const { PassThrough, Readable } = require('stream');
+const ffmpeg = require('fluent-ffmpeg');
 const { s3 } = require('../../config');
 const { controllerErrors, S3_BUCKET_NAME2 } = require('../../constants');
-const ffmpeg = require('fluent-ffmpeg');
+const MediaFileService = require('../../services/mediaFile');
 
 const mediaFileService = new MediaFileService();
 
@@ -56,35 +56,52 @@ exports.streamMediaFile = async (req, res, next) => {
 };
 
 exports.createFinalFile = async (req, res, next) => {
-  // console.log(req.query, 'query')
-  // console.log(req.params, 'params')
-  // console.log(req.file, 'file')
-  const { location, contentType, key } = await mediaFileService.findMediaFileById(req.params.file_id);
- 
-  const videoStream = new stream.PassThrough();
+  const { location } = await mediaFileService.findMediaFileById(req.params.file_id);
+
+  const videoStream = new PassThrough();
+  const imageStream = new PassThrough();
+
+  const buffer = Buffer.from(req.file.buffer);
+  const readable = new Readable()
+  readable._read = () => {};
+  readable.push(buffer);
+  readable.push(null);
+  readable.pipe(imageStream);
 
   ffmpeg()
     .input(location)
     .setStartTime(req.query.startTime)
-    .setDuration(5)
+    .setDuration(req.query.duration)
+    .input(imageStream)
+    .complexFilter(
+      [
+        {
+          'filter': 'overlay',
+          'options': {
+            'x': '25',
+            'y': '25'
+          },
+          'inputs': '[0:v][1:v]',
+          'outputs': 'tmp'
+        }
+      ], 'tmp')
     .outputOptions(['-movflags isml+frag_keyframe'])
+    .outputOptions(['-c:v libx264', '-pix_fmt yuv420p'])
     .toFormat('mp4')
-    .on('error', function(err,stdout,stderr) {
-        console.log('an error happened: ' + err.message);
-        console.log('ffmpeg stdout: ' + stdout);
-        console.log('ffmpeg stderr: ' + stderr);
-    })
-    .on('end', function() {
-        console.log('Processing finished !');
+    .pipe(videoStream, {end: true})
+    .on('error', function(err) {
+      console.log('an error happened: ' + err.message);
     })
     .on('progress', function(progress) {
         console.log('Processing: ' + progress.percent + '% done');
     })
-    .pipe(videoStream, {end: true});
+    .on('end', function() {
+      console.log('Processing finished !');
+    })
 
   const params = {
     Bucket: S3_BUCKET_NAME2,
-    Key: 's3Test8.mp4',
+    Key: 's3Test72.mp4',
     Body: videoStream,
     ContentType: 'application/octet-stream'
     };
@@ -94,5 +111,3 @@ exports.createFinalFile = async (req, res, next) => {
     console.log(data,'data')
   });
 };
-
-
