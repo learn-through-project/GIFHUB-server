@@ -3,15 +3,16 @@ const MediaFile = require('../models/mediaFile');
 module.exports = class {
   async saveMediaFile(mediaFile) {
     try {
-      const { originalname, contentType } = mediaFile;
+      const { originalname, contentType, Location, location } = mediaFile;
       return await MediaFile.create({
         ...mediaFile,
         original_name: originalname,
         content_type: contentType,
+        location: `${Location || location}` ,
       });
     } catch (err) {
-      console.log(SAVE_MEDIA_FILE, err);
-      throw new Error(SAVE_MEDIA_FILE);
+      console.log('err', err);
+      throw new Error('err');
     }
   }
 
@@ -24,15 +25,11 @@ module.exports = class {
     }
   }
 
-  async createFinalFile(query, id, imageFile) {
+  async deleteMediaFileById(id) {
     try {
-    
-
+      return await MediaFile.findByIdAndDelete(id);
     } catch (err) {
-
+      console.log('Error in delete media file from db: ', err);
     }
-
-
-
   }
 };
