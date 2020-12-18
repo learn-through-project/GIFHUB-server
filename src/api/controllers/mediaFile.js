@@ -62,7 +62,6 @@ exports.createFinalFile = async (req, res, next) => {
     await mediaFileService.deleteMediaFileById(mediaFileId);
 
     return res.status(200).json(savedMediaFile);
-
   } catch (err) {
     console.log('Error in createFinalFile controller: ', err);
     next(err)

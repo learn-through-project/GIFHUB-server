@@ -11,7 +11,6 @@ module.exports = class {
   async upload(key, body) {
     try {
       const params = { ...this.params, Key: key, Body: body };
-      console.log(params, 'upload?')
       return await s3.upload(params).promise();
     } catch (err) {
       console.log('Error in s3service upload: ', err);
@@ -20,7 +19,6 @@ module.exports = class {
 
   async getObject(key, range, videoStream) {
     const params = { ...this.params, Key: key, Range: range };
-    console.log(params, 'getobject?')
     const stream = s3.getObject(params).createReadStream();
     stream.pipe(videoStream);
   }
@@ -28,7 +26,6 @@ module.exports = class {
   async deleteObject(key) {
     try {
       const params = { ...this.params, Key: key };
-      console.log(params, 'delete?')
       return await s3.deleteObject(params).promise();
     } catch (err) {
       console.log('Error in s3service delete: ', err);
