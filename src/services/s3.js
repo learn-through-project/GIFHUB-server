@@ -10,25 +10,26 @@ module.exports = class {
 
   async upload(key, body) {
     try {
-      this.params.Key = key;
-      this.params.Body = body;
-      return await s3.upload(this.params).promise();
+      const params = { ...this.params, Key: key, Body: body };
+      console.log(params, 'upload?')
+      return await s3.upload(params).promise();
     } catch (err) {
       console.log('Error in s3service upload: ', err);
     }
   }
 
   async getObject(key, range, videoStream) {
-    this.params.Key = key;
-    this.params.Range = range;
-    const stream = s3.getObject(this.params).createReadStream();
+    const params = { ...this.params, Key: key, Range: range };
+    console.log(params, 'getobject?')
+    const stream = s3.getObject(params).createReadStream();
     stream.pipe(videoStream);
   }
 
   async deleteObject(key) {
     try {
-      this.params.Key = key;
-      return await s3.deleteObject(this.params).promise();
+      const params = { ...this.params, Key: key };
+      console.log(params, 'delete?')
+      return await s3.deleteObject(params).promise();
     } catch (err) {
       console.log('Error in s3service delete: ', err);
     }

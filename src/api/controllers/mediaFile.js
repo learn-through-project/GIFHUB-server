@@ -1,15 +1,14 @@
 const { PassThrough } = require('stream');
-const { s3 } = require('../../config');
-const { controllerErrors, S3_BUCKET_NAME2 } = require('../../constants');
+const { v4: uuidv4 } = require('uuid');
 const { MediaFileService, S3Service } = require('../../services');
 const { createFinalMediaFile, handleRange } = require('../../utils');
+const { controllerErrors, S3_BUCKET_NAME2 } = require('../../constants');
 
 const mediaFileService = new MediaFileService();
 const s3Service = new S3Service(S3_BUCKET_NAME2);
 
 exports.saveMediaFile = async (req, res, next) => {
   try {
-    console.log(1)
     const savedMediaFile = await mediaFileService.saveMediaFile(req.file);
     return res.status(200).json(savedMediaFile);
   } catch (err) {
@@ -48,20 +47,24 @@ exports.createFinalFile = async (req, res, next) => {
   try {
     const videoStream = new PassThrough();
     const mediaFileId = req.params.file_id;
-    const { location, key } = await mediaFileService.findMediaFileById(mediaFileId);
-    console.log(location, 'location')
+
+    const {
+      location,
+      key,
+      original_name: fileName
+    } = await mediaFileService.findMediaFileById(mediaFileId);
     createFinalMediaFile(location, req.query, videoStream, req.file);
 
-    const s3Upload = await s3Service.upload(`s3Test116.${req.query.format}`, videoStream);
-    const s3Delete = await s3Service.deleteObject(key);
-    console.log(s3Delete, 'd')
+    const s3Upload = await s3Service.upload(`${uuidv4()}_${fileName}`, videoStream);
+    const savedMediaFile = await mediaFileService.saveMediaFile(s3Upload);
+
+    await s3Service.deleteObject(key);
+    await mediaFileService.deleteMediaFileById(mediaFileId);
+
+    return res.status(200).json(savedMediaFile);
+
   } catch (err) {
     console.log('Error in createFinalFile controller: ', err);
     next(err)
   }
-  
-  
 };
-
-// const savedMediaFile = await mediaFileService.saveMediaFile(data);
-//     const deletePrevMediaFile = await mediaFileService.deleteMediaFileById(mediaFileId);
