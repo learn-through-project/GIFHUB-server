@@ -1,7 +1,7 @@
 const { PassThrough } = require('stream');
 const { v4: uuidv4 } = require('uuid');
 const { MediaFileService, S3Service } = require('../../services');
-const { createFinalMediaFile, handleRange } = require('../../utils');
+const { createFinalMediaFile, handleRange, createFileName } = require('../../utils');
 const { controllerErrors, S3_BUCKET_NAME2 } = require('../../constants');
 
 const mediaFileService = new MediaFileService();
@@ -47,15 +47,15 @@ exports.createFinalFile = async (req, res, next) => {
   try {
     const videoStream = new PassThrough();
     const mediaFileId = req.params.file_id;
-
     const {
       location,
       key,
-      original_name: fileName
+      original_name: fileName,
     } = await mediaFileService.findMediaFileById(mediaFileId);
     createFinalMediaFile(location, req.query, videoStream, req.file);
 
-    const s3Upload = await s3Service.upload(`${uuidv4()}_${fileName}`, videoStream);
+    const newFileName = createFileName(fileName, req.query.format);
+    const s3Upload = await s3Service.upload(`${uuidv4()}_${newFileName}`, videoStream);
     const savedMediaFile = await mediaFileService.saveMediaFile(s3Upload);
 
     await s3Service.deleteObject(key);

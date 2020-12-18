@@ -21,7 +21,6 @@ module.exports = class {
       return await MediaFile.findById(id);
     } catch (err) {
       console.log('Error in findMediaFileById:', err);
-      next(err);
     }
   }
 
