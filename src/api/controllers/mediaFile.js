@@ -67,3 +67,8 @@ exports.createFinalFile = async (req, res, next) => {
     next(err)
   }
 };
+
+exports.getMediaFiles = async (req, res, next) => {
+  const list = await mediaFileService.getAllMediaFile();
+  return res.status(200).json(list);
+};
