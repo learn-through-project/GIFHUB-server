@@ -1,8 +1,8 @@
 const express = require('express');
 const mediaFile = require('./routes/mediaFile');
-const router = express.Router();
+const app = express.Router();
 
 module.exports = () => {
-  mediaFile(router);
-  return router;
+  mediaFile(app);
+  return app;
 };

@@ -1,3 +1,4 @@
+const { Router } = require('express');
 const { multerS3: uploadS3, multerMemory } = require('../../config');
 const { config, path } = require('../../constants');
 const {
@@ -7,26 +8,28 @@ const {
   getMediaFiles,
 } = require('../controllers/mediaFile');
 
-module.exports = router => {
-  router.use(path.MEDIA_FILE, router);
+route = Router();
 
-  router.get(
+module.exports = app => {
+  app.use(path.MEDIA_FILE, route);
+
+  route.get(
     '/',
     getMediaFiles
   );
 
-  router.post(
+  route.post(
     '/',
     uploadS3.single(config.VIDEO_INPUT_TAG_NAME),
     saveMediaFile,
   );
 
-  router.get(
+  route.get(
     '/:file_id',
     streamMediaFile,
   );
 
-  router.post(
+  route.post(
     '/:file_id/finalFile',
     multerMemory.single(config.IMAGE_INPUT_TAG_NAME),
     createFinalFile,
