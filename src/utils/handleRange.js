@@ -3,7 +3,7 @@ module.exports = function(range, size, contentType) {
 
   if (!range) return;
 
-  const chunkSize = 10 ** 6 / 2;
+  const chunkSize = 10 ** 6;
   const start = Number(range.replace(/\D/g, ''));
   const end = Math.min(start + chunkSize, size - 1);
 
