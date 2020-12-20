@@ -1,8 +1,8 @@
 const { PassThrough, Readable } = require('stream');
 const ffmpeg = require('fluent-ffmpeg');
 
-module.exports = async function(mainFile, query, videoStream, imageFile) {
-  console.log('exec')
+module.exports = async (mainFile, query, videoStream, imageFile) => {
+  console.log('exec');
   try {
     const { format } = query;
     let command;
@@ -11,7 +11,7 @@ module.exports = async function(mainFile, query, videoStream, imageFile) {
     if (format === 'gif') outputOptions.push('-pix_fmt yuv420p');
 
     if (!imageFile) {
-      command = trimVideoFile(mainFile, query, outputOptions, videoStream)
+      command = trimVideoFile(mainFile, query, outputOptions, videoStream);
     } else {
       const imageStream = handleImageFile(imageFile);
       command = trimFileAndAddImage(mainFile, query, outputOptions, videoStream, imageStream);
@@ -31,20 +31,20 @@ module.exports = async function(mainFile, query, videoStream, imageFile) {
   }
 };
 
-function handleImageFile(imageFile) {
+ const handleImageFile = imageFile => {
   const imageStream = new PassThrough();
 
   const buffer = Buffer.from(imageFile.buffer);
-  const readable = new Readable()
+  const readable = new Readable();
   readable._read = () => {};
   readable.push(buffer);
   readable.push(null);
   readable.pipe(imageStream);
 
   return imageStream;
-}
+};
 
-function trimVideoFile(mainFile, query, outputOptions, videoStream) {
+const trimVideoFile = (mainFile, query, outputOptions, videoStream) => {
   const { format, startTime, duration } = query;
 
   return ffmpeg()
@@ -53,10 +53,10 @@ function trimVideoFile(mainFile, query, outputOptions, videoStream) {
     .setDuration(duration)
     .outputOptions(outputOptions)
     .toFormat(format)
-    .pipe(videoStream, {end: true})
-}
+    .pipe(videoStream, {end: true});
+};
 
-function trimFileAndAddImage(mainFile, query, outputOptions, videoStream, imageStream) {
+const trimFileAndAddImage = (mainFile, query, outputOptions, videoStream, imageStream)  => {
   const {
     width,
     height,
@@ -88,5 +88,5 @@ function trimFileAndAddImage(mainFile, query, outputOptions, videoStream, imageS
     .outputOptions(['-movflags isml+frag_keyframe'])
     .outputOptions(outputOptions)
     .toFormat(format)
-    .pipe(videoStream, {end: true})
-}
+    .pipe(videoStream, {end: true});
+};

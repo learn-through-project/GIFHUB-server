@@ -14,6 +14,9 @@ module.exports = {
   },
   rules: {
     quotes: ['error', 'single'],
-    'eol-last': ['error', 'always']
+    semi: ['error', 'always'],
+    'eol-last': ['error', 'always'],
+    'react-hooks/exhaustive-deps': 'off',
+    'no-multiple-empty-lines': ['error', { 'max': 1 }]
   },
 };

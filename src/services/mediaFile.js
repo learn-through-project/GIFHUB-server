@@ -1,4 +1,5 @@
 const MediaFile = require('../models/mediaFile');
+const { serviceMessages } = require('../constants');
 
 module.exports = class {
   async saveMediaFile(mediaFile) {
@@ -11,8 +12,8 @@ module.exports = class {
         location: `${Location || location}` ,
       });
     } catch (err) {
-      console.log('err', err);
-      throw new Error('err');
+      console.log(serviceMessages.SAVE_MEDIA_FILE_ERROR, err);
+      throw new Error(err.message);
     }
   }
 
@@ -20,7 +21,8 @@ module.exports = class {
     try {
       return await MediaFile.findById(id);
     } catch (err) {
-      console.log('Error in findMediaFileById:', err);
+      console.log(serviceMessages.FIND_MEDIA_FILE_BY_ID_ERROR, err);
+      throw new Error(err.message);
     }
   }
 
@@ -28,7 +30,8 @@ module.exports = class {
     try {
       return await MediaFile.findByIdAndDelete(id);
     } catch (err) {
-      console.log('Error in delete media file from db: ', err);
+      console.log(serviceMessages.DELETE_MEDIA_FILE_BY_ID_ERROR, err);
+      throw new Error(err.message);
     }
   }
 
@@ -36,7 +39,8 @@ module.exports = class {
     try {
       return await MediaFile.find({});
     } catch (err) {
-      console.log('Error in get all media file: ', err);
+      console.log(serviceMessages.GET_ALL_MEDIA_FILE_ERROR, err);
+      throw new Error(err.message);
     }
   }
 };

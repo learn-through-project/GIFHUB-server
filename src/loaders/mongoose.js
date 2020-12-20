@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
-const { DB_URL, DB_CONNECTION, DB_DISCONNECTION } = require('../constants');
+const { loaderMessages, config } = require('../constants');
 
 module.exports = async () => {
   try {
-    const connection = await mongoose.connect(DB_URL, {
+    const connection = await mongoose.connect(config.DB_URL, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: true,
       useUnifiedTopology: true,
     });
-    console.log(DB_CONNECTION);
+
+    console.log(loaderMessages.DB_CONNECTION);
   } catch (err) {
-    console.log(DB_DISCONNECTION, err);
+    console.log(loaderMessages.DB_DISCONNECTION, err);
   }
 };

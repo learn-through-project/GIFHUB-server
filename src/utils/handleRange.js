@@ -1,6 +1,5 @@
 
-module.exports = function(range, size, contentType) {
-
+module.exports = (range, size, contentType) => {
   if (!range) return;
 
   const chunkSize = 10 ** 6;
@@ -13,8 +12,8 @@ module.exports = function(range, size, contentType) {
     'Accept-Range': 'bytes',
     'Content-Length': contentLength,
     'Content-Type': contentType,
-  }
+  };
 
   const s3Range = `bytes=${start}-${end}`;
   return [headers, s3Range];
-}
+};

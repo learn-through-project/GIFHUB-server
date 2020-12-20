@@ -1,6 +1,5 @@
-const multer = require('multer');
 const { multerS3: uploadS3, multerMemory } = require('../../config');
-const { INPUT_TAG_NAME, MEDIA_FILE, ROOT_ROUTE } = require('../../constants');
+const { config, path } = require('../../constants');
 const {
   saveMediaFile,
   streamMediaFile,
@@ -9,16 +8,16 @@ const {
 } = require('../controllers/mediaFile');
 
 module.exports = router => {
-  router.use(MEDIA_FILE, router);
+  router.use(path.MEDIA_FILE, router);
 
   router.get(
-    ROOT_ROUTE,
+    '/',
     getMediaFiles
   );
 
   router.post(
-    ROOT_ROUTE,
-    uploadS3.single(INPUT_TAG_NAME),
+    '/',
+    uploadS3.single(config.VIDEO_INPUT_TAG_NAME),
     saveMediaFile,
   );
 
@@ -29,7 +28,7 @@ module.exports = router => {
 
   router.post(
     '/:file_id/finalFile',
-    multerMemory.single('image'),
+    multerMemory.single(config.IMAGE_INPUT_TAG_NAME),
     createFinalFile,
   );
 };

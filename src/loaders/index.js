@@ -4,4 +4,4 @@ const mongooseLoader = require('./mongoose');
 exports.init = async app => {
   await mongooseLoader();
   await expressLoader(app);
-}
+};

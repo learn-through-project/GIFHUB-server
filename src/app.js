@@ -1,17 +1,17 @@
 const loaders = require('./loaders');
 const express = require('express');
-const { PORT, SERVER_CONNECTION, SERVER_DISCONNECTION } = require('./constants')
+const { path, loaderMessages } = require('./constants');
 
 const excuteSever = async () => {
   const app = express();
-  const port = PORT || 8080;
+  const port = path.PORT || 8080;
 
   await loaders.init(app);
 
   app.listen(port, err => {
-    if (err) console.log(SERVER_DISCONNECTION, err);
-    console.log(`${SERVER_CONNECTION} ${port}`);
+    if (err) console.log(loaderMessages.SERVER_DISCONNECTION, err);
+    console.log(`${loaderMessages.SERVER_CONNECTION} ${port}`);
   });
-}
+};
 
 excuteSever();

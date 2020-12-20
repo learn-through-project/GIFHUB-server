@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const apiRoutes = require('../api');
-const { ROOT_ROUTE } = require('../constants');
+const { loaderMessages } = require('../constants');
 
 module.exports = async app => {
   try {
@@ -10,13 +10,13 @@ module.exports = async app => {
     app.use(express.json());
     app.use(require('morgan')('dev'));
     app.use(cors());
-    app.use(ROOT_ROUTE, apiRoutes());
+    app.use('/', apiRoutes());
     app.use(express.static(path.join(__dirname, '../public')));
-    app.use(function(req, res, next) {
+    app.use((req, res, next) => {
       next(createError(404));
     });
 
-    app.use(function(err, req, res, next) {
+    app.use((err, req, res) => {
       res.locals.message = err.message;
       res.locals.error = req.app.get('env') === 'development' ? err : {};
 
@@ -24,7 +24,6 @@ module.exports = async app => {
       res.render('error');
     });
   } catch (err) {
-    console.log('Error in express loader: ', err);
+    console.log(loaderMessages.EXPRESS_LOADER_ERROR, err);
   }
-  
 };
