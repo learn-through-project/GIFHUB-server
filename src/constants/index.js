@@ -1,10 +1,3 @@
-const dotenv = require('dotenv');
-const envFound = dotenv.config();
-
-if (envFound.error) {
-  throw new Error('Could not find env ');
-}
-
 exports.config = {
   DB_URL: process.env.DB_URL,
   S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,

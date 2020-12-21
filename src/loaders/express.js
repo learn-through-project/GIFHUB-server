@@ -8,15 +8,17 @@ module.exports = async app => {
   try {
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
-    app.use(require('morgan')('dev'));
     app.use(cors());
     app.use('/', apiRoutes());
     app.use(express.static(path.join(__dirname, '../public')));
     app.use((req, res, next) => {
-      next(createError(404));
+      const err = new Error('404 Not Found');
+      err.status = 404;
+      next(404);
     });
 
-    app.use((err, req, res) => {
+    app.use((err, req, res, next) => {
+      if(!err) return;
       res.locals.message = err.message;
       res.locals.error = req.app.get('env') === 'development' ? err : {};
 
