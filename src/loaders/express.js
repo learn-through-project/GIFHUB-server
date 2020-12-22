@@ -26,7 +26,9 @@ module.exports = async app => {
       res.locals.error = req.app.get('env') === 'development' ? err : {};
 
       res.status(err.status || 500);
-      res.json('error');
+      res.json({
+        message: err.message
+      });
     });
   } catch (err) {
     console.log(loaderMessages.EXPRESS_LOADER_ERROR, err);
