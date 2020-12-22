@@ -11,6 +11,9 @@ module.exports = async app => {
     app.use(cors());
     app.use('/', apiRoutes());
     app.use(express.static(path.join(__dirname, '../public')));
+    app.set('views', path.join(__dirname, '../views'));
+    app.set('view engine', 'jade');
+
     app.use((req, res, next) => {
       const err = new Error('404 Not Found');
       err.status = 404;
@@ -23,7 +26,7 @@ module.exports = async app => {
       res.locals.error = req.app.get('env') === 'development' ? err : {};
 
       res.status(err.status || 500);
-      res.render('error');
+      res.json('error');
     });
   } catch (err) {
     console.log(loaderMessages.EXPRESS_LOADER_ERROR, err);
