@@ -16,7 +16,7 @@ module.exports = class {
       throw new Error(err.message);
     }
   }
-
+  
   async findMediaFileById(id) {
     try {
       return await MediaFile.findById(id);
