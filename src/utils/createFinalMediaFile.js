@@ -2,7 +2,6 @@ const { PassThrough, Readable } = require('stream');
 const ffmpeg = require('fluent-ffmpeg');
 
 module.exports = async (mainFile, query, videoStream, imageFile) => {
-  console.log('exec');
   try {
     const { format } = query;
     let command;
