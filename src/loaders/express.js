@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const mediaFileRoute = require('../api/routes/mediaFile');
+const indexRoute = require('../api/routes');
 const { loaderMessages } = require('../constants');
 
 module.exports = async app => {
@@ -9,6 +10,7 @@ module.exports = async app => {
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
     app.use(cors());
+    app.use('/', indexRoute);
     app.use('/mediaFile', mediaFileRoute);
     app.use(express.static(path.join(__dirname, '../public')));
     app.set('views', path.join(__dirname, '../views'));
