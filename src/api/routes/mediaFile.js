@@ -11,12 +11,12 @@ const {
 route = Router();
 
 route.get(
-  '/',
+  '/mediaFile',
   getMediaFiles
 );
 
 route.post(
-  '/',
+  '/mediaFile',
   uploadS3.single(config.VIDEO_INPUT_TAG_NAME),
   saveMediaFile,
 );
