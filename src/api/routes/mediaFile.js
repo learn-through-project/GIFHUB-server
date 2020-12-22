@@ -10,28 +10,26 @@ const {
 
 route = Router();
 
-module.exports = app => {
-  app.use('/mediaFile', route);
+route.get(
+  '/',
+  getMediaFiles
+);
 
-  route.get(
-    '/',
-    getMediaFiles
-  );
+route.post(
+  '/',
+  uploadS3.single(config.VIDEO_INPUT_TAG_NAME),
+  saveMediaFile,
+);
 
-  route.post(
-    '/',
-    uploadS3.single(config.VIDEO_INPUT_TAG_NAME),
-    saveMediaFile,
-  );
+route.get(
+  '/:file_id',
+  streamMediaFile,
+);
 
-  route.get(
-    '/:file_id',
-    streamMediaFile,
-  );
+route.post(
+  '/:file_id/finalFile',
+  multerMemory.single(config.IMAGE_INPUT_TAG_NAME),
+  createFinalFile,
+);
 
-  route.post(
-    '/:file_id/finalFile',
-    multerMemory.single(config.IMAGE_INPUT_TAG_NAME),
-    createFinalFile,
-  );
-};
+module.exports = route;
