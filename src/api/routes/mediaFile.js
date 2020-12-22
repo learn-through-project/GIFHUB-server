@@ -11,7 +11,7 @@ const {
 route = Router();
 
 module.exports = app => {
-  app.use(path.MEDIA_FILE, route);
+  app.use('/mediaFile', route);
 
   route.get(
     '/',
