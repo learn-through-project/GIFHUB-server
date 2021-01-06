@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const morgan = require('morgan');
+const cors = require('cors');
 
 const loaders = require('./loaders');
 const express = require('express');
@@ -10,6 +11,7 @@ const excuteSever = async () => {
   try {
     const app = express();
     app.use(morgan('dev'));
+    app.use(cors());
     const port = path.PORT || 8080;
 
     await loaders.init(app);
