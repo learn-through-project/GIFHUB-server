@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { multerS3: uploadS3, multerMemory } = require('../../config');
+const { multerS3: uploadS3 } = require('../../config');
 const { config } = require('../../constants');
 const {
   saveMediaFile,
@@ -22,7 +22,7 @@ route.get(
 
 route.post(
   '/:file_id/finalFile',
-  multerMemory.single(config.IMAGE_INPUT_TAG_NAME),
+  uploadS3.single(config.IMAGE_INPUT_TAG_NAME),
   createFinalFile,
 );
 

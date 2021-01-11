@@ -12,8 +12,7 @@ module.exports = async (mainFile, query, videoStream, imageFile) => {
     if (!imageFile) {
       command = trimVideoFile(mainFile, query, outputOptions, videoStream);
     } else {
-      const imageStream = handleImageFile(imageFile);
-      command = trimFileAndAddImage(mainFile, query, outputOptions, videoStream, imageStream);
+      command = trimFileAndAddImage(mainFile, query, outputOptions, videoStream, imageFile.location);
     }
 
     command.on('error', function(err) {
@@ -30,19 +29,6 @@ module.exports = async (mainFile, query, videoStream, imageFile) => {
   }
 };
 
- const handleImageFile = imageFile => {
-  const imageStream = new PassThrough();
-
-  const buffer = Buffer.from(imageFile.buffer);
-  const readable = new Readable();
-  readable._read = () => {};
-  readable.push(buffer);
-  readable.push(null);
-  readable.pipe(imageStream);
-
-  return imageStream;
-};
-
 const trimVideoFile = (mainFile, query, outputOptions, videoStream) => {
   const { format, startTime, duration } = query;
 
@@ -55,7 +41,7 @@ const trimVideoFile = (mainFile, query, outputOptions, videoStream) => {
     .pipe(videoStream, {end: true});
 };
 
-const trimFileAndAddImage = (mainFile, query, outputOptions, videoStream, imageStream)  => {
+const trimFileAndAddImage = (mainFile, query, outputOptions, videoStream, imageUrl)  => {
   const {
     width,
     height,
@@ -70,7 +56,7 @@ const trimFileAndAddImage = (mainFile, query, outputOptions, videoStream, imageS
     .input(mainFile)
     .setStartTime(startTime)
     .setDuration(duration)
-    .input(imageStream)
+    .input(imageUrl)
     .complexFilter(
       [
         `[1:v]scale=${width}:${height}[img]`,

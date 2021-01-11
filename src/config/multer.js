@@ -15,7 +15,3 @@ exports.multerS3 = multer({
     acl: config.S3_ACL,
   })
 });
-
-exports.multerMemory = multer({
-  storage: multer.memoryStorage()
-});
