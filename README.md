@@ -18,7 +18,6 @@
 
 ### 📣 배포주소 및 발표 영상
 
-- 배포주소: **[https://www.gifhub.live](https://www.gifhub.live/)**
 
 - 발표영상: [**https://youtu.be/eygGVpb1DRk**](https://youtu.be/eygGVpb1DRk)
 
