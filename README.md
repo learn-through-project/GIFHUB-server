@@ -4,7 +4,8 @@
 
 <br/>
 
-![demo gif](https://gifhub-file-bucket2.s3.ap-northeast-2.amazonaws.com/demo.gif)
+![Group 1](https://github.com/devsince2021/GIFHUB-Server/assets/77978026/6e1033f7-a323-4645-bddf-6b2ac3a23d12)
+
 
 <br/>
 
@@ -29,13 +30,6 @@
 - Backend - Node js & Express & MongoDB
 - Third party - FFmpeg
 
-<br/>
-
----
-
-![demo gif](https://gifhub-file-bucket2.s3.ap-northeast-2.amazonaws.com/notion-01.png)
-
-<br/>
 
 ## Motivation 🔎
 
